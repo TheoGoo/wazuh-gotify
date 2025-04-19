@@ -1,5 +1,8 @@
 # wazuh-gotify
 Gotify integration for Wazuh. notifiations
+- If you have any questions don't hesitate to create an issue
+- If you have any improvements you can create a pr
+- Please leave a star if this helped you (:
 
 ## Creating custom integrations
 -    create copy script to a file named ```custom-gotify``` at ```/var/ossec/integrations/```   
