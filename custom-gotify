@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import requests
+
+# Read configuration parameters (assumes correct arguments are provided)
+alert_file_path = sys.argv[1]
+token = sys.argv[2]
+base_url = sys.argv[3]
+
+# Read the alert JSON from the file
+with open(alert_file_path, 'r') as f:
+    alert_json = json.load(f)
+
+# Extract the required fields from the alert JSON
+alert_level = alert_json['rule']['level']
+ruleid = alert_json['rule']['id']
+description = alert_json['rule']['description']
+agentid = alert_json['agent']['id']
+agentname = alert_json['agent']['name']
+path = alert_json.get('syscheck', {}).get('path', 'N/A')
+
+# Build the title and message for Gotify
+title = "Wazuh Alert - Rule " + str(ruleid)
+message = (
+    "FIM alert on [" + path + "]\n"
+    "- State: " + description + "\n"
+    "- Rule ID: " + str(ruleid) + "\n"
+    "- Alert level: " + str(alert_level) + "\n"
+    "- Agent: " + str(agentid) + " " + agentname
+)
+
+# Construct the payload and send the alert to Gotify
+payload = {
+    "title": title,
+    "message": message,
+    "priority": 5
+}
+headers = {'Content-Type': 'application/json'}
+url = base_url + "/message?token=" + token
+
+response = requests.post(url, headers=headers, json=payload)
+sys.exit(0)
