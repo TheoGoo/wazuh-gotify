@@ -40,5 +40,5 @@ payload = {
 headers = {'Content-Type': 'application/json'}
 url = base_url + "/message?token=" + token
 
-response = requests.post(url, headers=headers, json=payload)
+requests.post(url, headers=headers, json=payload)
 sys.exit(0)
